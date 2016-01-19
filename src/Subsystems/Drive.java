@@ -56,7 +56,7 @@ public class Drive {
         
 			Y =  Math.pow(XX2 , powerCurve);
         
-		}else if(Y2 > range) {
+		}else if(XX2 > range) {
         
 			Y =  -(Math.pow(XX2 , powerCurve));
         
