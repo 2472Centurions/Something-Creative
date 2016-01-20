@@ -36,6 +36,48 @@ public class Drive {
 		range = DeadZone;
 	}
 	
+	public void arcadeDrive(double forward, double rotation, double throtle){
+
+		
+	       
+        y = forward;
+      
+        z = rotation;
+      
+        if(z < -range){
+            
+            X =  Math.pow(z , powerCurve);
+           
+        }else if(z > range) {
+            
+            X =  -(Math.pow(z, powerCurve));
+            
+        }else{
+            
+            X = 0;
+            
+        }
+        
+        if(y < range){
+            
+            Y =  -Math.pow(y , powerCurve);
+            
+        }else if(y > range) {
+            
+            Y =  (Math.pow(y , powerCurve));
+            
+        }else{
+            
+            Y = 0;
+            
+        }
+        
+        d.arcadeDrive(Y * throtle, X * throtle);
+        
+        
+        
+    }
+	
 	public void tank(double XX1, double XX2){
 		
 		if(XX1 < -range){
@@ -69,4 +111,6 @@ public class Drive {
 		d.tankDrive(X, Y);
 		
 	}
+	
+	
 }

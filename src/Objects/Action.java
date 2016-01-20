@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Action {
 	private long startTime,endTime;
 	
-	public boolean endFactor;
+	//public boolean endFactor;
 	
-	public boolean done = false;
+	//public boolean done = false;
 	
 	public Action(){
 		
@@ -18,13 +18,13 @@ public class Action {
 	
 	public void startAction(){
 		
-		setTimeOut();
+		setTimeOut(5000);
 		
-		
+		startTime = System.currentTimeMillis();
 		
 	}
 	
-	public void endAction(){
+	private void endAction(){
 		
 		
 		
@@ -32,7 +32,7 @@ public class Action {
 	
 	public boolean isFinished(){
 		
-		if(timeout() || endFactor){
+		if(timeout() || actionDone()){
 			
 			endAction();
 			
@@ -49,19 +49,27 @@ public class Action {
 		
 	}
 	
-	private boolean timeout(){
+	protected boolean timeout(){
 		
 		return endTime <= System.currentTimeMillis();
 		
 	}
 	
-	public void overRideFailSafe(){
+	protected boolean actionDone(){
 		
-		long timeAdded = 1000000000;
-		
-		endTime = endTime + timeAdded;
+		return false;
 		
 	}
+	
+	
+	
+	//public void overRideFailSafe(){
+		
+	//	long timeAdded = 1000000000;
+		
+	//	endTime = endTime + timeAdded;
+		
+	//}
 
 	public void periodic(){
 		
@@ -69,11 +77,11 @@ public class Action {
 		
 	}
 	
-	public void setTimeOut(){
+	protected void setTimeOut(long timeoutvalue){
 		
-		startTime = System.currentTimeMillis();
+		//startTime = System.currentTimeMillis();
 		
-		endTime = startTime + 5000;
+		endTime = startTime + timeoutvalue;
 		
 		SmartDashboard.putNumber("Action Timeout Time", endTime);
 		
