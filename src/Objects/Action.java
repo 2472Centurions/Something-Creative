@@ -2,7 +2,7 @@ package Objects;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Action {
+public class Action{
 	private long startTime,endTime;
 	
 	//public boolean endFactor;
