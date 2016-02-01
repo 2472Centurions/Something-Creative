@@ -1,6 +1,8 @@
 
 package Subsystems;
 
+import com.kauailabs.nav6.frc.IMU;
+
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -111,6 +113,25 @@ public class Drive {
 		d.tankDrive(X, Y);
 		
 	}
-	
+	public void turn(String dir,double power){
+		if(dir=="right"){
+			FL.set(power);
+			BL.set(power);
+			FR.set(-power);
+			BR.set(-power);
+		}
+		if(dir=="left"){
+			FL.set(-power);
+			BL.set(-power);
+			FR.set(power);
+			BR.set(power);
+		}
+	}
+	public void kill(){
+		FL.set(0);
+		BL.set(0);
+		FR.set(0);
+		BR.set(0);
+	}
 	
 }
