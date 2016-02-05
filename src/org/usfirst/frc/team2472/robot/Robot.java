@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import Subsystems.driveForward;
+import Test.testIt;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,7 +29,7 @@ public class Robot extends IterativeRobot {
 	final String customAuto = "My Auto";
 	String autoSelected;
 	SendableChooser chooser;
-
+	
 	Joystick JoyL = new Joystick(0);
 	Joystick JoyR = new Joystick(1);
 	Joystick Box = new Joystick(2);
@@ -48,7 +49,7 @@ public class Robot extends IterativeRobot {
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
-	  	
+	 
     	Timer.delay(2);
     	try {
     		DriverStation.reportError("Starting Try", false);
@@ -91,8 +92,13 @@ public class Robot extends IterativeRobot {
 	 * SendableChooser make sure to add them to the chooser code above as well.
 	 */
 	public void autonomousInit() {
+		
+		
 		if (Box.getRawButton(1)) {
 			step.add(new driveForward(1.0,d));
+			if(imu.getRoll()==0){
+				
+			}else step.add(new driveForward(1.0,d));
 			//(time to drive forward, drive)
 		}
 		if(Box.getRawButton(2)){
@@ -147,7 +153,7 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during test mode
 	 */
 	public void testPeriodic() {
-
+		testIt t = new testIt();
 	}
 
 }
