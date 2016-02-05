@@ -82,11 +82,11 @@ public class Drive {
 		
 		if(XX1 < -range){
 			
-			X =  Math.pow(XX1 , powerCurve);
+			X =  -XX1;
        
 		}else if(XX1 > range) {
         
-			X =  -(Math.pow(XX1, powerCurve));
+			X =  -XX1;
         
 		}else{
         
@@ -96,11 +96,11 @@ public class Drive {
     
 		if(XX2 < range){
         
-			Y =  Math.pow(XX2 , powerCurve);
+			Y =  -XX2;
         
 		}else if(XX2 > range) {
         
-			Y =  -(Math.pow(XX2 , powerCurve));
+			Y =  -XX2;
         
 		}else{
         

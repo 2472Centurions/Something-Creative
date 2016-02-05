@@ -4,9 +4,14 @@ package org.usfirst.frc.team2472.robot;
 import java.util.ArrayList;
 
 import com.kauailabs.nav6.frc.IMUAdvanced;
+import com.ni.vision.NIVision;
+import com.ni.vision.NIVision.DrawMode;
+import com.ni.vision.NIVision.Image;
+import com.ni.vision.NIVision.ShapeMode;
 
 import Objects.Action;
 import Subsystems.Drive;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -14,6 +19,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.vision.AxisCamera;
 import Subsystems.driveForward;
 
 /**
@@ -28,11 +34,17 @@ public class Robot extends IterativeRobot {
 	final String customAuto = "My Auto";
 	String autoSelected;
 	SendableChooser chooser;
+	
+	
+	int session,session2;
+    Image frame,frame2;
+    AxisCamera camera,camera2;
+	
 
 	Joystick JoyL = new Joystick(0);
 	Joystick JoyR = new Joystick(1);
 	Joystick Box = new Joystick(2);
-	Drive d = new Drive( 3,0,1,2 );
+	Drive d = new Drive( 3,1,0,2 );
 	IMUAdvanced imu;
 	
 	SerialPort serial_port;
@@ -48,10 +60,23 @@ public class Robot extends IterativeRobot {
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
+		
+		frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+
+        // open the camera at the IP address assigned. This is the IP address that the camera
+        // can be accessed through the web interface.
+        camera = new AxisCamera("10.1.91.100");
+        
+        frame2 = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+
+        // open the camera at the IP address assigned. This is the IP address that the camera
+        // can be accessed through the web interface.
+        camera2 = new AxisCamera("10.1.91.100");
 	  	
     	Timer.delay(2);
     	try {
     		DriverStation.reportError("Starting Try", false);
+    		Timer.delay(1.0);
         	serial_port = new SerialPort(57600,SerialPort.Port.kUSB);
         	DriverStation.reportError("Serial Port OK", false);
     		// You can add a second parameter to modify the 
@@ -67,9 +92,9 @@ public class Robot extends IterativeRobot {
     		imu = new IMUAdvanced(serial_port,update_rate_hz);
     		DriverStation.reportError("IMU OK", false);
         	} catch( Exception ex ) {
-        		
+        		String ere = ex.getMessage();
         		DriverStation.reportError("No IMU", false);
-        		
+        		DriverStation.reportError(ere, false);
         	}
 
 		chooser = new SendableChooser();
@@ -98,6 +123,8 @@ public class Robot extends IterativeRobot {
 		if(Box.getRawButton(2)){
 			
 		}
+		
+		
 		autoSelected = (String) chooser.getSelected();
 		// autoSelected = SmartDashboard.getString("Auto Selector",
 		// defaultAuto);
@@ -120,14 +147,32 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during autonomous
 	 */
 	public void autonomousPeriodic() {
-		switch (autoSelected) {
-		case customAuto:
-			// Put custom auto code here
-			break;
-		case defaultAuto:
-		default:
-			// Put default auto code here
-			break;
+		
+		if(step.size() > 0 && step.get(currentAction) != null){
+	    	
+			if (!step.get(currentAction).isFinished()){
+				step.get(currentAction).periodic();
+			}
+			
+			if (!stepSecondary.get(currentAction).isFinished()){
+				stepSecondary.get(currentAction).periodic();
+			}
+
+    	
+    		if(step.get(currentAction).isFinished() && stepSecondary.get(currentAction).isFinished() ){
+    		
+    				currentAction++;
+    				
+    				if(step.get(currentAction) != null){
+    					
+    					step.get(currentAction).startAction();
+    					stepSecondary.get(currentAction).startAction();
+    		
+    				}
+    				
+    		}
+    		
+		
 		}
 	}
 
@@ -136,11 +181,10 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 
-		double throttle = (-JoyL.getThrottle() + 1.0) / 2.0;
-		d.tank(JoyL.getX(), JoyR.getX());
+		//double throttle = (-JoyL.getThrottle() + 1.0) / 2.0;
+		d.tank(JoyL.getY(), JoyR.getY());
 		
-		SmartDashboard.putNumber("IMU Yaw", imu.getYaw());
-
+		//SmartDashboard.putNumber("IMU Yaw", imu.getYaw());
 	}
 
 	/**
