@@ -23,6 +23,25 @@ public class Drive {
 		moter[3] = new CANTalon(BR);
 		d = new RobotDrive(moter[0],moter[1],moter[2],moter[3]);
 	}
+	
+	public void runMotor(int mID){
+		
+		moter[mID].set(1.0);
+		
+	}
+	public void runMotorBack(int mID){
+		
+		moter[mID].set(-1.0);
+		
+	}
+	public void stopMotors(){
+		
+		moter[0].set(0.0);
+		moter[1].set(0.0);
+		moter[2].set(0.0);
+		moter[3].set(0.0);
+		
+	}
 
 	public void setPowerCurve(double PowerCurve){
 		

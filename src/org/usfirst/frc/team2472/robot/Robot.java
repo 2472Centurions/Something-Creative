@@ -11,6 +11,9 @@ import com.ni.vision.NIVision.ShapeMode;
 
 import Objects.Action;
 import Subsystems.Drive;
+import Subsystems.Intake;
+import Subsystems.Winch;
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -34,7 +37,11 @@ public class Robot extends IterativeRobot {
 	final String customAuto = "My Auto";
 	String autoSelected;
 	SendableChooser chooser;
+
 	
+	
+	
+	CANTalon c7 = new CANTalon(7);
 	
 	int session,session2;
     Image frame,frame2;
@@ -43,9 +50,14 @@ public class Robot extends IterativeRobot {
 
 	Joystick JoyL = new Joystick(0);
 	Joystick JoyR = new Joystick(1);
-	Joystick Box = new Joystick(2);
-	Drive d = new Drive( 3,1,0,2 );
+	Joystick JoyPad = new Joystick(2);
+	Joystick Box = new Joystick(3);
+	Drive d = new Drive( 4,2,1,3 );
 	IMUAdvanced imu;
+	
+	Intake i = new Intake(5);
+	
+	Winch w = new Winch(6);
 	
 	SerialPort serial_port;
 
@@ -54,6 +66,11 @@ public class Robot extends IterativeRobot {
 	ArrayList<Action> stepSecondary = new ArrayList<Action>();
 
 	int currentAction = 0;
+	
+	int FL = 0;
+	int FR = 1;
+	int BL = 2;
+	int BR = 3;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -184,6 +201,18 @@ public class Robot extends IterativeRobot {
 		//double throttle = (-JoyL.getThrottle() + 1.0) / 2.0;
 		d.tank(JoyL.getY(), JoyR.getY());
 		
+		if(JoyPad.getRawButton(1)) {
+			i.intakeBall();
+		}
+		if(JoyPad.getRawButton(2)) {
+			i.outtakeBall();
+		}
+		if(JoyPad.getRawButton(3)) {
+			w.Reel();
+		}
+		
+		
+		
 		//SmartDashboard.putNumber("IMU Yaw", imu.getYaw());
 	}
 
@@ -191,6 +220,33 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during test mode
 	 */
 	public void testPeriodic() {
+		
+		if(Box.getRawButton(1)){
+			d.runMotor(FL);
+		}
+		if(Box.getRawButton(2)){
+			d.runMotor(FR);
+		}
+		if(Box.getRawButton(3)){
+			d.runMotor(BL);
+		}
+		if(Box.getRawButton(4)){
+			d.runMotor(BR);
+		}
+		if(Box.getRawButton(5)){
+			d.stopMotors();
+			
+			c7.set(0.0);
+		}
+	//	if(Box.getRawButton(6)){
+	//		i.set(1.0);
+	//	}
+	//	if(Box.getRawButton(7)){
+	//		w.set(1.0);
+	//	}
+		if(Box.getRawButton(8)){
+			c7.set(1.0);
+		}
 
 	}
 
