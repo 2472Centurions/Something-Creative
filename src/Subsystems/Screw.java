@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.CANTalon;
 
 
 public class Screw {
-CANTalon screw = new CANTalon(40);
+CANTalon screw = new CANTalon(6);
 public void extend(){
 	screw.set(1);
 }

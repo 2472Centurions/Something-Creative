@@ -8,7 +8,7 @@ public class Intake {
 	
 	public Intake(int iM){
 	
-	intakeM = new CANTalon(51);
+	intakeM = new CANTalon(7);
 	
 	}
 	

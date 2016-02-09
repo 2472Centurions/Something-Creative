@@ -3,7 +3,7 @@ package Subsystems;
 import edu.wpi.first.wpilibj.CANTalon;
 
 public class Hammer {
-CANTalon Ham = new CANTalon(10);
+CANTalon Ham = new CANTalon(8);
 
 public void hammerspin(double speeeeeeeeeeeeed){
 	Ham.ConfigFwdLimitSwitchNormallyOpen(true);
