@@ -9,6 +9,7 @@ import com.ni.vision.NIVision.DrawMode;
 import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.ShapeMode;
 
+import Actions.driveForward;
 import Objects.Action;
 import Subsystems.Drive;
 import Subsystems.Intake;
@@ -26,7 +27,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
-import Subsystems.driveForward;
 
 /**
  * The VM is configured to automatically run this class, and to call the
