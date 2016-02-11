@@ -101,13 +101,13 @@ public class Drive {
 
 		if (j.getY() > range || j.getY() < -range) {
 
-			moter[0].set(-j.getY());
+			moter[3].set(-j.getY());
 			moter[1].set(-j.getY());
 			
 		}
 		if (k.getY() > range || k.getY() < -range) {
 			moter[2].set(k.getY());
-			moter[3].set(k.getY());
+			moter[0].set(k.getY());
 		}
 	}
 public void cantaloninit(int ramprate){

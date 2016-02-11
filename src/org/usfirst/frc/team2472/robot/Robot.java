@@ -56,9 +56,9 @@ Sizzors s = new Sizzors();
 	Drive d = new Drive(4, 2, 1, 3);
 	IMUAdvanced imu;
 
-	Intake i = new Intake(5);
+	Intake i = new Intake(6);
 
-	Winch w = new Winch(6);
+	Winch w = new Winch(5);
 
 	SerialPort serial_port;
 
@@ -220,16 +220,12 @@ Sizzors s = new Sizzors();
 	 */
 	public void testPeriodic() {
 		if (Box.getRawButton(6)) {
-			s.goIn();
+			w.ReelStop();
 		}
 		if (Box.getRawButton(7)) {
-			s.out();
+			w.ReelBack();
 		}
-		if (Box.getRawButton(8)) {
-
-			s.off();
-
-		}
+		
 		if (Box.getRawButton(1)) {
 			d.runMotor(FL);
 		}
@@ -237,10 +233,10 @@ Sizzors s = new Sizzors();
 			d.runMotor(FR);
 		}
 		if (Box.getRawButton(3)) {
-			d.runMotor(BL);
+			s.out();
 		}
 		if (Box.getRawButton(4)) {
-			d.runMotor(BR);
+			s.goIn();
 		}
 		if (Box.getRawButton(5)) {
 			d.stopMotors();
@@ -254,7 +250,7 @@ Sizzors s = new Sizzors();
 		// w.set(1.0);
 		// }
 		if (Box.getRawButton(8)) {
-			c7.set(1.0);
+			w.Reel();
 		}
 
 	}

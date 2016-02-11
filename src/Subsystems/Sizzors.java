@@ -1,21 +1,19 @@
 package Subsystems;
 
-
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Solenoid;
 
 public class Sizzors {
-	public Sizzors s;
-	DoubleSolenoid d = new DoubleSolenoid(2,3);
-    
+	Solenoid d;
+	
+	public Sizzors()
+	{
+	d = new Solenoid(3);
+	}
 	public void goIn() {
-		d.set(DoubleSolenoid.Value.kForward);
+		d.set(true);
 	}
 
 	public void out() {
-		d.set(DoubleSolenoid.Value.kReverse);
-	}
-
-	public void off() {
-		d.set(DoubleSolenoid.Value.kOff);
+		d.set(false);
 	}
 }
