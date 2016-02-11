@@ -18,11 +18,11 @@ public class Drive {
 	double Z;
 	private RobotDrive d;
 	double range,powerCurve;
-	public Drive(int FL, int FR, int BL, int BR){
-		moter[0] = new CANTalon(FL);
-		moter[1] = new CANTalon(FR);
-		moter[2] = new CANTalon(BL);
-		moter[3] = new CANTalon(BR);
+	public Drive(int FLX, int FRX, int BLX, int BRX){
+		moter[0] = new CANTalon(FLX);
+		moter[1] = new CANTalon(FRX);
+		moter[2] = new CANTalon(BLX);
+		moter[3] = new CANTalon(BRX);
 		d = new RobotDrive(moter[0],moter[1],moter[2],moter[3]);
 	}
 
@@ -36,6 +36,12 @@ public class Drive {
 	public void setDeadZone(double DeadZone){
 		
 		range = DeadZone;
+	}
+	public void tankdrive1(double leftspeed, double rightspeed){
+		FL.set(leftspeed);
+		BL.set(leftspeed);
+		FR.set(rightspeed);
+		BR.set(rightspeed);
 	}
 	
 	public void arcadeDrive(double forward, double rotation, double throtle){

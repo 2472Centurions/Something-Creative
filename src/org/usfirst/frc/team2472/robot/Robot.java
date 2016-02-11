@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import Subsystems.driveForward;
+import Subsystems.turnRight;
 import Test.testIt;
 
 /**
@@ -29,13 +30,13 @@ public class Robot extends IterativeRobot {
 	final String customAuto = "My Auto";
 	String autoSelected;
 	SendableChooser chooser;
-	
+
 	Joystick JoyL = new Joystick(0);
 	Joystick JoyR = new Joystick(1);
 	Joystick Box = new Joystick(2);
-	Drive d = new Drive( 3,0,1,2 );
+	Drive d = new Drive(3, 0, 1, 2);
 	IMUAdvanced imu;
-	
+
 	SerialPort serial_port;
 
 	ArrayList<Objects.Action> step = new ArrayList<Action>();
@@ -49,35 +50,35 @@ public class Robot extends IterativeRobot {
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
-	 
-    	Timer.delay(2);
-    	try {
-    		DriverStation.reportError("Starting Try", false);
-        	serial_port = new SerialPort(57600,SerialPort.Port.kUSB);
-        	DriverStation.reportError("Serial Port OK", false);
-    		// You can add a second parameter to modify the 
-    		// update rate (in hz) from 4 to 100.  The default is 100.
-    		// If you need to minimize CPU load, you can set it to a
-    		// lower value, as shown here, depending upon your needs.
-    		
-    		// You can also use the IMUAdvanced class for advanced
-    		// features.
-    		
-    		byte update_rate_hz = 50;
-    		//imu = new IMU(serial_port,update_rate_hz);
-    		imu = new IMUAdvanced(serial_port,update_rate_hz);
-    		DriverStation.reportError("IMU OK", false);
-        	} catch( Exception ex ) {
-        		
-        		DriverStation.reportError("No IMU", false);
-        		
-        	}
+
+		Timer.delay(2);
+		try {
+			DriverStation.reportError("Starting Try", false);
+			serial_port = new SerialPort(57600, SerialPort.Port.kUSB);
+			DriverStation.reportError("Serial Port OK", false);
+			// You can add a second parameter to modify the
+			// update rate (in hz) from 4 to 100. The default is 100.
+			// If you need to minimize CPU load, you can set it to a
+			// lower value, as shown here, depending upon your needs.
+
+			// You can also use the IMUAdvanced class for advanced
+			// features.
+
+			byte update_rate_hz = 50;
+			// imu = new IMU(serial_port,update_rate_hz);
+			imu = new IMUAdvanced(serial_port, update_rate_hz);
+			DriverStation.reportError("IMU OK", false);
+		} catch (Exception ex) {
+
+			DriverStation.reportError("No IMU", false);
+
+		}
 
 		chooser = new SendableChooser();
 		chooser.addDefault("Default Auto", defaultAuto);
 		chooser.addObject("My Auto", customAuto);
 		SmartDashboard.putData("Auto choices", chooser);
-		
+
 	}
 
 	/**
@@ -92,18 +93,16 @@ public class Robot extends IterativeRobot {
 	 * SendableChooser make sure to add them to the chooser code above as well.
 	 */
 	public void autonomousInit() {
-		
-		
+
 		if (Box.getRawButton(1)) {
-			step.add(new driveForward(1.0,d));
-			if(imu.getRoll()==0){
-				
-			}else step.add(new driveForward(1.0,d));
-			//(time to drive forward, drive)
-		}
-		if(Box.getRawButton(2)){
 			
-		}
+				step.add(new driveForward(1.0, d));
+				step.add(new turnRight(33, d, imu));
+				step.add(new driveForward(1.0, d));
+			}
+			
+		
+
 		autoSelected = (String) chooser.getSelected();
 		// autoSelected = SmartDashboard.getString("Auto Selector",
 		// defaultAuto);
@@ -119,7 +118,9 @@ public class Robot extends IterativeRobot {
 		}
 		currentAction = 0;
 		step.get(currentAction).startAction();
-
+		if (Box.getRawButton(1)) {
+			step.add(new driveForward(1, d, 1));
+		}
 	}
 
 	/**
@@ -144,7 +145,7 @@ public class Robot extends IterativeRobot {
 
 		double throttle = (-JoyL.getThrottle() + 1.0) / 2.0;
 		d.tank(JoyL.getX(), JoyR.getX());
-		
+
 		SmartDashboard.putNumber("IMU Yaw", imu.getYaw());
 
 	}

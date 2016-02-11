@@ -55,7 +55,7 @@ public class Action{
 		
 	}
 	
-	protected boolean actionDone(){
+	 public boolean actionDone(){
 		
 		return false;
 		

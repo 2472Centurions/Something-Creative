@@ -50,10 +50,9 @@ public class turnRight extends Action {
 		speed = speeed;
 	}
 
-	public turnRight(double angle, double time, Drive RobotDrive, IMUAdvanced IMU) {
+	public turnRight(double angle, Drive RobotDrive, IMUAdvanced IMU) {
 
-		t = time;
-
+		
 		d = RobotDrive;
 
 		imu = IMU;
