@@ -3,17 +3,24 @@ package Subsystems;
 import edu.wpi.first.wpilibj.Solenoid;
 
 public class Sizzors {
-	Solenoid d;
 	
-	public Sizzors()
-	{
-	d = new Solenoid(3);
+	Solenoid sizzors;
+	
+	public Sizzors(int sS){
+		
+		sizzors = new Solenoid(sS);
+		
 	}
+	
 	public void goIn() {
-		d.set(true);
+		
+		sizzors.set(true);
+		
 	}
 
 	public void out() {
-		d.set(false);
+		
+		sizzors.set(false);
+		
 	}
 }

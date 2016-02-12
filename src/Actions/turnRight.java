@@ -87,7 +87,7 @@ public class turnRight extends Action {
 		if (imu.getYaw() < angie + error && imu.getYaw() > angie - error) {
 			done = true;
 			if (done) {
-				d.kill();
+				d.stopMotors();
 				endAction();
 			}
 		}

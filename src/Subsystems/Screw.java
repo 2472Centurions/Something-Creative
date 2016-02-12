@@ -2,15 +2,26 @@ package Subsystems;
 
 import edu.wpi.first.wpilibj.CANTalon;
 
-
 public class Screw {
-CANTalon screw = new CANTalon(6);
-public void extend(){
-	screw.set(1);
-}
-public void pullin(){
-	screw.set(-1);
-}
-
-
+	
+	CANTalon screw;
+	
+	public Screw(int sM){
+		
+		screw = new CANTalon(sM);
+		
+	}
+	
+	public void extend(){
+		
+		screw.set(1);
+	
+	}
+	
+	public void pullin(){
+		
+		screw.set(-1);
+	
+	}
+	
 }

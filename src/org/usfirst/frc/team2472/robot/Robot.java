@@ -10,9 +10,13 @@ import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.ShapeMode;
 
 import Actions.driveForward;
+import Constants.Const;
 import Objects.Action;
 import Subsystems.Drive;
+import Subsystems.Dummy;
+import Subsystems.Hammer;
 import Subsystems.Intake;
+import Subsystems.Screw;
 import Subsystems.Sizzors;
 import Subsystems.Winch;
 import edu.wpi.first.wpilibj.CANTalon;
@@ -41,24 +45,32 @@ public class Robot extends IterativeRobot {
 	String autoSelected;
 	SendableChooser chooser;
 
-	Compressor c = new Compressor(0);
+	Compressor compressor = new Compressor(Const.compressorS);
+	
+	Sizzors sizzors = new Sizzors(Const.sizzorsS);
 
-	CANTalon c7 = new CANTalon(7);
-Sizzors s = new Sizzors();
 	int session, session2;
 	Image frame, frame2;
 	AxisCamera camera, camera2;
 
-	Joystick JoyL = new Joystick(0);
-	Joystick JoyR = new Joystick(1);
-	Joystick JoyPad = new Joystick(2);
-	Joystick Box = new Joystick(3);
-	Drive d = new Drive(4, 2, 1, 3);
+	Joystick JoyL = new Joystick(Const.lStick);
+	Joystick JoyR = new Joystick(Const.rStick);
+	Joystick JoyPad = new Joystick(Const.gPAD);
+	Joystick Box = new Joystick(Const.sBox);
+	
+	Drive d = new Drive(Const.FL, Const.FR, Const.BL, Const.BR);
+	
 	IMUAdvanced imu;
 
-	Intake i = new Intake(6);
+	Intake intake = new Intake(Const.intakeM);
 
-	Winch w = new Winch(5);
+	Winch winch = new Winch(Const.winchM);
+	
+	Hammer hammer = new Hammer(Const.hammerM);
+	
+	Screw screw = new Screw(Const.screwM);
+	
+	Dummy dummy = new Dummy(Const.dummyS1,Const.dummyS2)
 
 	SerialPort serial_port;
 
@@ -68,17 +80,12 @@ Sizzors s = new Sizzors();
 
 	int currentAction = 0;
 
-	int FL = 0;
-	int FR = 1;
-	int BL = 2;
-	int BR = 3;
-
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
-		c.setClosedLoopControl(true);
+		compressor.setClosedLoopControl(true);
 		d.cantaloninit(24);
 		frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 
@@ -203,13 +210,18 @@ Sizzors s = new Sizzors();
 		d.tank(JoyL, JoyR);
 
 		if (JoyPad.getRawButton(1)) {
-			i.intakeBall();
+			intake.intakeBall();
 		}
 		if (JoyPad.getRawButton(2)) {
-			i.outtakeBall();
+			intake.outtakeBall();
 		}
 		if (JoyPad.getRawButton(3)) {
-			w.Reel();
+			winch.Reel();
+		}
+		if(Box.getRawButton(1)){
+			
+			Dummy.shoot();
+			
 		}
 
 		// SmartDashboard.putNumber("IMU Yaw", imu.getYaw());
@@ -219,38 +231,30 @@ Sizzors s = new Sizzors();
 	 * This function is called periodically during test mode
 	 */
 	public void testPeriodic() {
+		
 		if (Box.getRawButton(6)) {
-			w.ReelStop();
+			winch.ReelStop();
 		}
 		if (Box.getRawButton(7)) {
-			w.ReelBack();
+			winch.ReelBack();
 		}
-		
 		if (Box.getRawButton(1)) {
-			d.runMotor(FL);
+			d.runMotor(Const.FL);
 		}
 		if (Box.getRawButton(2)) {
-			d.runMotor(FR);
+			d.runMotor(Const.FR);
 		}
 		if (Box.getRawButton(3)) {
-			s.out();
+			sizzors.out();
 		}
 		if (Box.getRawButton(4)) {
-			s.goIn();
+			sizzors.goIn();
 		}
 		if (Box.getRawButton(5)) {
 			d.stopMotors();
-
-			c7.set(0.0);
 		}
-		// if(Box.getRawButton(6)){
-		// i.set(1.0);
-		// }
-		// if(Box.getRawButton(7)){
-		// w.set(1.0);
-		// }
 		if (Box.getRawButton(8)) {
-			w.Reel();
+			winch.Reel();
 		}
 
 	}

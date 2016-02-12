@@ -122,4 +122,19 @@ public void cantaloninit(int ramprate){
 		FR.set(b);
 		BR.set(b);
 	}
+	
+	public void turn(String dir,double power){
+		if(dir=="right"){
+			FL.set(power);
+			BL.set(power);
+			FR.set(-power);
+			BR.set(-power);
+		}
+		if(dir=="left"){
+			FL.set(-power);
+			BL.set(-power);
+			FR.set(power);
+			BR.set(power);
+		}
+	}
 }

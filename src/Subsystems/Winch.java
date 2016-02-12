@@ -17,26 +17,19 @@ public class Winch {
 		
 		winchM.enableLimitSwitch(true, true);
 		winchM.enableBrakeMode(true);
-		
-		
 	}
-	
-	
-	
 
 	public void Reel(){
-		
-		
 		
 		winchM.set(1.0);
 		
 	}
 	
-	public void ReelBack()
-	{
+	public void ReelBack(){
 		
 		winchM.set(-1.0);
 	}
+	
 	public void ReelStop()
 	{
 		winchM.set(0.0);
