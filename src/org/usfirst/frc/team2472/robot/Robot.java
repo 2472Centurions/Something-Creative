@@ -5,10 +5,7 @@ import java.util.ArrayList;
 
 import com.kauailabs.nav6.frc.IMUAdvanced;
 import com.ni.vision.NIVision;
-import com.ni.vision.NIVision.DrawMode;
 import com.ni.vision.NIVision.Image;
-import com.ni.vision.NIVision.ShapeMode;
-
 import Actions.driveForward;
 import Constants.Const;
 import Objects.Action;
@@ -19,10 +16,7 @@ import Subsystems.Intake;
 import Subsystems.Screw;
 import Subsystems.Sizzors;
 import Subsystems.Winch;
-import edu.wpi.first.wpilibj.CANTalon;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -70,7 +64,7 @@ public class Robot extends IterativeRobot {
 	
 	Screw screw = new Screw(Const.screwM);
 	
-	Dummy dummy = new Dummy(Const.dummyS1,Const.dummyS2)
+	Dummy dummy = new Dummy(Const.dummyS1,Const.dummyS2);
 
 	SerialPort serial_port;
 
@@ -220,7 +214,27 @@ public class Robot extends IterativeRobot {
 		}
 		if(Box.getRawButton(1)){
 			
-			Dummy.shoot();
+			dummy.shoot();
+			
+		}
+		if(Box.getRawButton(2)){
+			
+			dummy.reload();
+			
+		}
+		if(Box.getRawButton(3)){
+			
+			dummy.off();
+			
+		}
+		if(Box.getRawButton(5)){
+			
+			sizzors.goIn();
+			
+		}
+		if(Box.getRawButton(6)){
+			
+			sizzors.out();
 			
 		}
 
