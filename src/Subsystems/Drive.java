@@ -116,4 +116,10 @@ public void cantaloninit(int ramprate){
 	moter[2].setVoltageRampRate(ramprate);
 	moter[3].setVoltageRampRate(ramprate);
 }
+	public void tankdrive1(double a, double b){
+		FL.set(a);
+		BL.set(a);
+		FR.set(b);
+		BR.set(b);
+	}
 }
