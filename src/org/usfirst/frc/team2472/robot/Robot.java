@@ -15,7 +15,9 @@ import Subsystems.Hammer;
 import Subsystems.Intake;
 import Subsystems.Screw;
 import Subsystems.Sizzors;
+import Subsystems.Vision;
 import Subsystems.Winch;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -38,7 +40,7 @@ public class Robot extends IterativeRobot {
 	//final String customAuto = "My Auto";
 	//String autoSelected;
 	//SendableChooser chooser;
-
+	CameraServer usb;
 	Compressor compressor = new Compressor(Const.compressorS);
 	
 	public static Sizzors sizzors = new Sizzors(Const.sizzorsS);
@@ -79,6 +81,7 @@ public class Robot extends IterativeRobot {
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
+		Vision.camera(usb);
 		compressor.setClosedLoopControl(true);
 		d.cantaloninit(24);
 		frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);

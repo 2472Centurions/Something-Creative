@@ -21,7 +21,7 @@ public class Const {
 	
 	public static final int dummyS1 = 4;
 	public static final int dummyS2 = 5;
-	public static final int sizzorsS = 6;
+	public static final int sizzorsS = 3;
 	
 	public static final double yawDeadZone = 3.0;//imu deadzone = 3 degrees
 	public static final double angleError = 2.5;
