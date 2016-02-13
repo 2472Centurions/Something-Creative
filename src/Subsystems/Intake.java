@@ -23,5 +23,9 @@ public class Intake {
 		intakeM.set(-1.0);
 		
 	}
+	public void stopIntake(){
+		intakeM.set(0.0);
+		
+	}
 	
 }

@@ -56,7 +56,7 @@ public class Robot extends IterativeRobot {
 	
 	IMUAdvanced imu;
 
-	Intake intake = new Intake(Const.intakeM);
+	public static Intake intake = new Intake(Const.intakeM);
 
 	Winch winch = new Winch(Const.winchM);
 	
