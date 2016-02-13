@@ -1,119 +1,116 @@
 package Actions;
 
 import Objects.Action;
-import Subsystems.Drive;
+import org.usfirst.frc.team2472.robot.Robot;
 
-import com.kauailabs.nav6.frc.IMUAdvanced;
-
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class driveStraightUntilOverDefenses extends Action {
-	int range = 1;
 
-	public class driveForwardUntilOverDefenses extends Action {
 		public double pitch;
-		private boolean anglechange = false;
-		private long endTime;
-
-		private double t;
-
 		
-
-		private Drive d;
-		IMUAdvanced imu;
+		private boolean anglechange = false;
 
 		private double speed = .75;
+		
+		private double tolerance = 5.0;
+		
+		private long flatTime = 0;
+		
+		private boolean done = false;
 
-		public driveForwardUntilOverDefenses(double time, Drive RobotDrive) {
+		public driveStraightUntilOverDefenses(double time) {
 
-			t = time;
-
-			d = RobotDrive;
-
-			d.setPowerCurve(2);
-
-			d.setDeadZone(.04);
-
-			// in = new intakeWheel[0];
-
+			timeout = time;
+			
 		}
 
-		public driveForwardUntilOverDefenses(double time, Drive RobotDrive, double speeed) {
+		public driveStraightUntilOverDefenses(double time, double speeed) {
 
-			t = time;
-
-			d = RobotDrive;
-
-			d.setPowerCurve(2);
-
-			d.setDeadZone(.04);
+			timeout = time;
 
 			speed = speeed;
-
-		}
-
-		public driveForwardUntilOverDefenses(double time, Drive RobotDrive, IMUAdvanced IMU) {
-
-			t = time;
-
-			d = RobotDrive;
-
-			imu = IMU;
-
-		}
-
-		public driveForwardUntilOverDefenses(double time, Drive RobotDrive, IMUAdvanced IMU, double PowerCurve) {
-
-			t = time;
-
-			d = RobotDrive;
-
-			imu = IMU;
-
-			
 
 		}
 
 		public void startAction() {
 
 			super.startAction();
-			pitch = imu.getPitch();
-			setTimeOut((long) (t * 1000));
+			
+			pitch = Robot.imu.getPitch();
 
-			if (imu != null) {
+			if (Robot.imu != null) {
 
-				imu.zeroYaw();
+				Robot.imu.zeroYaw();
 			}
 
 		}
 
 		public void periodic() {
-			double adjustment = .1 * imu.getYaw();
-			if (pitch != imu.getPitch()) {
+			
+			double adjustment = .1 * Robot.imu.getYaw();
+			
+			if (Math.abs(pitch - Robot.imu.getPitch()) >= tolerance) {
+				
 				anglechange = true;
 
 			}
-			if (!timeout()) {
+			
+			if (!isTimedOut()) {
 
-				d.tankdrive1(.8 + adjustment, .8 - adjustment);
-				// endFactor = (endTime <= System.currentTimeMillis());
-
-				SmartDashboard.putNumber("End Time", endTime);
-			} else
-				d.tankdrive1(0, 0);
-
-			if (anglechange = true) {
-				d.tankdrive1(.8 + adjustment, .8 - adjustment);
-				if (imu.getPitch() < pitch + range && imu.getPitch() > pitch - range)
-					endAction();
+				Robot.d.tankdrive1(.8*speed + adjustment, .8*speed - adjustment);
+				
 			}
+				
+				
+
+			if (anglechange == true) {
+				
+				Robot.d.tankdrive1(.8*speed + adjustment, .8*speed - adjustment);
+				
+				
+				
+				if (Math.abs(pitch - Robot.imu.getPitch()) >= tolerance ){
+					
+					flatTime = System.currentTimeMillis();
+					
+				}
+				else{
+					
+					if(System.currentTimeMillis() - flatTime > 2000){
+						
+						done = true;
+						
+					}
+					
+				}
+			}
+			
 		}
 
 		public void endAction() {
 
-			SmartDashboard.putBoolean("Ended", true);
+			Robot.d.tankdrive1(0, 0);
 
 		}
-	}
+		
+		public boolean isFinished(){
+			
+			if(isTimedOut() || done){
+				
+				endAction();
+				
+				return true;
+				
+			}
+			
+			else{
+				
+				return false;
+				
+			}
+			
+		}
+	
+		
+	
 }

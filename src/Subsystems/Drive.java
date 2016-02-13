@@ -119,17 +119,29 @@ public class Drive {
 			moter[0].set(-j.getY());
 		}
 	}
-public void cantaloninit(int ramprate){
-	moter[0].setVoltageRampRate(ramprate);
-	moter[1].setVoltageRampRate(ramprate);
-	moter[2].setVoltageRampRate(ramprate);
-	moter[3].setVoltageRampRate(ramprate);
-}
+	public void cantaloninit(int ramprate){
+		moter[0].setVoltageRampRate(ramprate);
+		moter[1].setVoltageRampRate(ramprate);
+		moter[2].setVoltageRampRate(ramprate);
+		moter[3].setVoltageRampRate(ramprate);
+	}
+	
 	public void tankdrive1(double a, double b){
-		FL.set(a);
-		BL.set(a);
-		FR.set(b);
-		BR.set(b);
+		
+		FL.set(constrain(a));
+		BL.set(constrain(a));
+		FR.set(constrain(b));
+		BR.set(constrain(b));
+	}
+	
+	private double constrain(double In){
+		
+		double Out = Math.min(In, 1.0);
+		
+		Out = Math.max(Out, -1.0);
+		
+		return Out;
+		
 	}
 	
 	public void turn(String dir,double power){

@@ -5,86 +5,54 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Action{
 	private long startTime,endTime;
 	
-	//public boolean endFactor;
-	
-	//public boolean done = false;
-	
-	public Action(){
-		
-		
-		
-	}
-	
+	public double timeout = 0;
 	
 	public void startAction(){
 		
-		setTimeOut(5000);
-		
 		startTime = System.currentTimeMillis();
+		
+		endTime = startTime + (long)timeout*1000;
 		
 	}
 	
 	private void endAction(){
 		
-		
-		
 	}
 	
 	public boolean isFinished(){
 		
-		if(timeout() || actionDone()){
+		if(isTimedOut()){
 			
 			endAction();
 			
 			return true;
-			
-			
 
 		}else{
 			
 			return false;
 			
-			
 		}
 		
 	}
 	
-	protected boolean timeout(){
+	protected boolean isTimedOut(){
 		
 		return endTime <= System.currentTimeMillis();
 		
 	}
-	
-	protected boolean actionDone(){
-		
-		return false;
-		
-	}
-	
-	
-	
-	//public void overRideFailSafe(){
-		
-	//	long timeAdded = 1000000000;
-		
-	//	endTime = endTime + timeAdded;
-		
-	//}
 
 	public void periodic(){
 		
-		
-		
 	}
 	
-	protected void setTimeOut(long timeoutvalue){
+	//protected void setTimeOut(double timeoutvalue){
 		
 		//startTime = System.currentTimeMillis();
 		
-		endTime = startTime + timeoutvalue;
+		//endTime = startTime + (long)timeoutvalue*1000;
 		
-		SmartDashboard.putNumber("Action Timeout Time", endTime);
+		//SmartDashboard.putNumber("Action Timeout Time", endTime);
 		
-	}
+	//}
 
 }

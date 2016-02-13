@@ -34,10 +34,10 @@ import edu.wpi.first.wpilibj.vision.AxisCamera;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	final String defaultAuto = "Default";
-	final String customAuto = "My Auto";
-	String autoSelected;
-	SendableChooser chooser;
+	//final String defaultAuto = "Default";
+	//final String customAuto = "My Auto";
+	//String autoSelected;
+	//SendableChooser chooser;
 
 	Compressor compressor = new Compressor(Const.compressorS);
 	
@@ -54,7 +54,7 @@ public class Robot extends IterativeRobot {
 	
 	public static Drive d = new Drive(Const.FL, Const.FR, Const.BL, Const.BR);
 	
-	IMUAdvanced imu;
+	public static IMUAdvanced imu;
 
 	public static Intake intake = new Intake(Const.intakeM);
 
@@ -68,7 +68,7 @@ public class Robot extends IterativeRobot {
 
 	SerialPort serial_port;
 
-	ArrayList<Objects.Action> step = new ArrayList<Action>();
+	ArrayList<Action> step = new ArrayList<Action>();
 
 	ArrayList<Action> stepSecondary = new ArrayList<Action>();
 
@@ -119,10 +119,10 @@ public class Robot extends IterativeRobot {
 			DriverStation.reportError(ere, false);
 		}
 
-		chooser = new SendableChooser();
-		chooser.addDefault("Default Auto", defaultAuto);
-		chooser.addObject("My Auto", customAuto);
-		SmartDashboard.putData("Auto choices", chooser);
+		//chooser = new SendableChooser();
+		//chooser.addDefault("Default Auto", defaultAuto);
+		//chooser.addObject("My Auto", customAuto);
+		//SmartDashboard.putData("Auto choices", chooser);
 
 	}
 
@@ -146,21 +146,21 @@ public class Robot extends IterativeRobot {
 
 		}
 
-		autoSelected = (String) chooser.getSelected();
+		//autoSelected = (String) chooser.getSelected();
 		// autoSelected = SmartDashboard.getString("Auto Selector",
 		// defaultAuto);
-		System.out.println("Auto selected: " + autoSelected);
+		//System.out.println("Auto selected: " + autoSelected);
 		if (step.size() > 0) {
 
 			currentAction = 0;
 
 			step.get(currentAction).startAction();
 
-			// stepSecondary.get(currentAction).startAction();
+			stepSecondary.get(currentAction).startAction();
 
 		}
-		currentAction = 0;
-		step.get(currentAction).startAction();
+		//currentAction = 0;
+		//step.get(currentAction).startAction();
 
 	}
 
