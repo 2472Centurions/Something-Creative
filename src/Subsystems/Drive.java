@@ -1,6 +1,7 @@
 
 package Subsystems;
 
+import Constants.Const;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -26,10 +27,18 @@ public class Drive {
 	}
 
 	public void runMotor(int mID) {
-		if (mID == 0 || mID == 2)
-			moter[mID].set(-1.0);
-		else
-			moter[mID].set(1.0);
+		
+		if(mID == Const.FL)
+			moter[0].set(1.0);
+		
+		if(mID == Const.FR)
+			moter[1].set(1.0);
+		
+		if(mID == Const.BL)
+			moter[2].set(1.0);
+		
+		if(mID == Const.BR)
+			moter[3].set(1.0);
 	}
 
 	public void runMotorBack(int mID) {
@@ -99,15 +108,15 @@ public class Drive {
 
 	public void tank(Joystick j, Joystick k) {
 
-		if (j.getY() > range || j.getY() < -range) {
+		if (k.getY() > range || k.getY() < -range) {
 
-			moter[3].set(-j.getY());
-			moter[1].set(-j.getY());
+			moter[3].set(k.getY());
+			moter[1].set(k.getY());
 			
 		}
-		if (k.getY() > range || k.getY() < -range) {
-			moter[2].set(k.getY());
-			moter[0].set(k.getY());
+		if (j.getY() > range || j.getY() < -range) {
+			moter[2].set(-j.getY());
+			moter[0].set(-j.getY());
 		}
 	}
 public void cantaloninit(int ramprate){

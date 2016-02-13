@@ -19,7 +19,7 @@ public class Const {
 	
 	public static final int compressorS = 0;
 	
-	public static final int dummyS1 = 0;
-	public static final int dummyS2 = 1;
-	public static final int sizzorsS = 2;
+	public static final int dummyS1 = 4;
+	public static final int dummyS2 = 5;
+	public static final int sizzorsS = 6;
 }

@@ -41,7 +41,7 @@ public class Robot extends IterativeRobot {
 
 	Compressor compressor = new Compressor(Const.compressorS);
 	
-	Sizzors sizzors = new Sizzors(Const.sizzorsS);
+	public static Sizzors sizzors = new Sizzors(Const.sizzorsS);
 
 	int session, session2;
 	Image frame, frame2;
@@ -52,19 +52,19 @@ public class Robot extends IterativeRobot {
 	Joystick JoyPad = new Joystick(Const.gPAD);
 	Joystick Box = new Joystick(Const.sBox);
 	
-	Drive d = new Drive(Const.FL, Const.FR, Const.BL, Const.BR);
+	public static Drive d = new Drive(Const.FL, Const.FR, Const.BL, Const.BR);
 	
 	IMUAdvanced imu;
 
-	Intake intake = new Intake(Const.intakeM);
+	public static Intake intake = new Intake(Const.intakeM);
 
-	Winch winch = new Winch(Const.winchM);
+	public static Winch winch = new Winch(Const.winchM);
 	
-	Hammer hammer = new Hammer(Const.hammerM);
+	public static Hammer hammer = new Hammer(Const.hammerM);
 	
-	Screw screw = new Screw(Const.screwM);
+	public static Screw screw = new Screw(Const.screwM);
 	
-	Dummy dummy = new Dummy(Const.dummyS1,Const.dummyS2);
+	public static Dummy dummy = new Dummy(Const.dummyS1,Const.dummyS2);
 
 	SerialPort serial_port;
 
@@ -246,12 +246,6 @@ public class Robot extends IterativeRobot {
 	 */
 	public void testPeriodic() {
 		
-		if (Box.getRawButton(6)) {
-			winch.ReelStop();
-		}
-		if (Box.getRawButton(7)) {
-			winch.ReelBack();
-		}
 		if (Box.getRawButton(1)) {
 			d.runMotor(Const.FL);
 		}
@@ -259,18 +253,14 @@ public class Robot extends IterativeRobot {
 			d.runMotor(Const.FR);
 		}
 		if (Box.getRawButton(3)) {
-			sizzors.out();
+			d.runMotor(Const.BL);
 		}
 		if (Box.getRawButton(4)) {
-			sizzors.goIn();
+			d.runMotor(Const.BR);
 		}
 		if (Box.getRawButton(5)) {
 			d.stopMotors();
 		}
-		if (Box.getRawButton(8)) {
-			winch.Reel();
-		}
-
 	}
 
 }
