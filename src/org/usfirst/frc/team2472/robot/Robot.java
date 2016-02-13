@@ -139,7 +139,7 @@ public class Robot extends IterativeRobot {
 	 */
 	public void autonomousInit() {
 		if (Box.getRawButton(1)) {
-			step.add(new driveForward(1.0, d));
+			step.add(new driveForward(3.0, 1.0));
 			// (time to drive forward, drive)
 		}
 		if (Box.getRawButton(2)) {
