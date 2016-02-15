@@ -15,7 +15,7 @@ public class Winch {
 		
 		winchM.ConfigFwdLimitSwitchNormallyOpen(true);
 		
-		winchM.enableLimitSwitch(true, true);
+		winchM.enableLimitSwitch(true, false);
 		winchM.enableBrakeMode(true);
 	}
 

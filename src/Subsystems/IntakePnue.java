@@ -2,25 +2,25 @@ package Subsystems;
 
 import edu.wpi.first.wpilibj.Solenoid;
 
-public class Sizzors {
+public class IntakePnue {
 	
-	Solenoid sizzors;
+	Solenoid iP;
 	
-	public Sizzors(int sS){
+	public IntakePnue(int sS){
 		
-		sizzors = new Solenoid(sS);
+		iP = new Solenoid(sS);
 		
 	}
 	
 	public void goIn() {
 		
-		sizzors.set(true);
+		iP.set(true);
 		
 	}
 
 	public void out() {
 		
-		sizzors.set(false);
+		iP.set(false);
 		
 	}
 }

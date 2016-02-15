@@ -1,6 +1,7 @@
 package Subsystems;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.Joystick;
 
 public class Hammer {
 	
@@ -10,15 +11,16 @@ public class Hammer {
 		
 		hammer = new CANTalon(hM);
 		
+		hammer.ConfigFwdLimitSwitchNormallyOpen(true);
+		
+		hammer.enableLimitSwitch(true, true);
+		hammer.enableBrakeMode(true);
+		
 	}
 	
-	public void hammerspin(double speed){
+	public void hammerspin(Joystick j){
 	
-		hammer.ConfigFwdLimitSwitchNormallyOpen(true);
-	
-		hammer.enableLimitSwitch(true, true);
-	
-		hammer.set(speed);
+		hammer.set(j.getRawAxis(1));
 	
 	}
 

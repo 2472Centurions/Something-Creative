@@ -10,6 +10,11 @@ public class Screw {
 		
 		screw = new CANTalon(sM);
 		
+		screw.ConfigFwdLimitSwitchNormallyOpen(true);
+		
+		screw.enableLimitSwitch(true, true);
+		screw.enableBrakeMode(true);
+		
 	}
 	
 	public void extend(){
@@ -24,4 +29,9 @@ public class Screw {
 	
 	}
 	
+	public void stopScrew(){
+		
+		screw.set(0);
+		
+	}
 }

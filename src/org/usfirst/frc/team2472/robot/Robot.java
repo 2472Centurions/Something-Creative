@@ -10,11 +10,12 @@ import Actions.driveForward;
 import Constants.Const;
 import Objects.Action;
 import Subsystems.Drive;
-import Subsystems.Dummy;
 import Subsystems.Hammer;
 import Subsystems.Intake;
+import Subsystems.IntakePnue;
+import Subsystems.Scissors;
 import Subsystems.Screw;
-import Subsystems.Sizzors;
+import Subsystems.ScrewPnue;
 import Subsystems.Vision;
 import Subsystems.Winch;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -24,8 +25,6 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
 
 /**
@@ -43,7 +42,7 @@ public class Robot extends IterativeRobot {
 	CameraServer usb;
 	Compressor compressor = new Compressor(Const.compressorS);
 	
-	public static Sizzors sizzors = new Sizzors(Const.sizzorsS);
+	public static IntakePnue intakePnue = new IntakePnue(Const.intakePnueS);
 
 	int session, session2;
 	Image frame, frame2;
@@ -51,7 +50,7 @@ public class Robot extends IterativeRobot {
 
 	Joystick JoyL = new Joystick(Const.lStick);
 	Joystick JoyR = new Joystick(Const.rStick);
-	Joystick JoyPad = new Joystick(Const.gPAD);
+	Joystick JoyPad = new Joystick(Const.jPad);
 	Joystick Box = new Joystick(Const.sBox);
 	
 	public static Drive d = new Drive(Const.FL, Const.FR, Const.BL, Const.BR);
@@ -66,7 +65,9 @@ public class Robot extends IterativeRobot {
 	
 	public static Screw screw = new Screw(Const.screwM);
 	
-	public static Dummy dummy = new Dummy(Const.dummyS1,Const.dummyS2);
+	public static ScrewPnue screwPnue = new ScrewPnue(Const.ScrewPnueS1,Const.ScrewPnueS2);
+	
+	public static Scissors scissors = new Scissors(Const.ScissorsS1,Const.ScissorsS2);
 
 	SerialPort serial_port;
 
@@ -205,41 +206,53 @@ public class Robot extends IterativeRobot {
 
 		// double throttle = (-JoyL.getThrottle() + 1.0) / 2.0;
 		d.tank(JoyL, JoyR);
+		
+		hammer.hammerspin(JoyPad);
 
-		if (JoyPad.getRawButton(1)) {
-			intake.intakeBall();
-		}
-		if (JoyPad.getRawButton(2)) {
+		if (JoyPad.getRawButton(Const.jPadButtonA)) {
 			intake.outtakeBall();
 		}
-		if (JoyPad.getRawButton(3)) {
-			winch.Reel();
+		else
+			intake.stopIntake();
+		
+		if (JoyPad.getRawButton(Const.jPadButtonB)) {
+			intake.intakeBall();
 		}
-		if(Box.getRawButton(1)){
-			
-			dummy.shoot();
-			
+		else
+			intake.stopIntake();
+		
+		if (JoyPad.getRawButton(Const.jPadButtonX)) {
+			screw.extend();
 		}
-		if(Box.getRawButton(2)){
-			
-			dummy.reload();
-			
+		else
+			screw.stopScrew();
+		
+		if (JoyPad.getRawButton(Const.jPadButtonY)) {
+			screw.pullin();
 		}
-		if(Box.getRawButton(3)){
-			
-			dummy.off();
-			
+		else
+			screw.stopScrew();
+		
+		if (JoyPad.getRawButton(Const.jPadButtonLeft)) {
+			scissors.reload();
 		}
-		if(Box.getRawButton(5)){
-			
-			sizzors.goIn();
-			
+		else if(JoyPad.getRawAxis(2) == 1.0) {
+			scissors.shoot();
 		}
-		if(Box.getRawButton(6)){
-			
-			sizzors.out();
-			
+		
+		if (JoyPad.getRawButton(Const.jPadButtonRight)) {
+			screwPnue.reload();
 		}
+		else if(JoyPad.getRawAxis(3) == 1.0) {
+			screwPnue.shoot();
+		}
+		
+		if (JoyPad.getRawButton(Const.jPadButtonStart)) {
+			winch.ReelBack();
+		}
+		else
+			winch.ReelStop();
+		
 
 		// SmartDashboard.putNumber("IMU Yaw", imu.getYaw());
 	}
