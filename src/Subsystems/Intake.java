@@ -14,13 +14,13 @@ public class Intake {
 	
 	public void intakeBall(){
 		
-		intakeM.set(1.0);
+		intakeM.set(-.5);
 		
 	}
 
 	public void outtakeBall(){
 		
-		intakeM.set(-1.0);
+		intakeM.set(.5);
 		
 	}
 	

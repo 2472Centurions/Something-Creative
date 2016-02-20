@@ -15,13 +15,13 @@ public class ScrewPnue {
 	
 	public void shoot(){
 		
-		screwPnue.set(Value.kForward);
+		screwPnue.set(Value.kReverse);
 		
 	}
 	
 	public void reload(){
 		
-		screwPnue.set(Value.kReverse);
+		screwPnue.set(Value.kForward);
 		
 	}
 	

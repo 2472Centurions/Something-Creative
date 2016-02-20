@@ -16,6 +16,7 @@ import Subsystems.IntakePnue;
 import Subsystems.Scissors;
 import Subsystems.Screw;
 import Subsystems.ScrewPnue;
+import Subsystems.Suspension;
 import Subsystems.Vision;
 import Subsystems.Winch;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -24,7 +25,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.vision.AxisCamera;
 
 /**
@@ -41,7 +44,7 @@ public class Robot extends IterativeRobot {
 	//SendableChooser chooser;
 	CameraServer usb;
 	Compressor compressor = new Compressor(Const.compressorS);
-	
+	long starttime= System.currentTimeMillis();
 	public static IntakePnue intakePnue = new IntakePnue(Const.intakePnueS);
 
 	int session, session2;
@@ -68,6 +71,8 @@ public class Robot extends IterativeRobot {
 	public static ScrewPnue screwPnue = new ScrewPnue(Const.ScrewPnueS1,Const.ScrewPnueS2);
 	
 	public static Scissors scissors = new Scissors(Const.ScissorsS1,Const.ScissorsS2);
+	
+	public static Suspension suspension = new Suspension(Const.suspensionS1, Const.suspensionS2);
 
 	SerialPort serial_port;
 
@@ -76,17 +81,21 @@ public class Robot extends IterativeRobot {
 	ArrayList<Action> stepSecondary = new ArrayList<Action>();
 
 	int currentAction = 0;
+	
+
 
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
+
 		Vision.camera(usb);
 		compressor.setClosedLoopControl(true);
 		d.cantaloninit(24);
 		frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
-
+		scissors.reload();
+		suspension.shoot();
 		// open the camera at the IP address assigned. This is the IP address
 		// that the camera
 		// can be accessed through the web interface.
@@ -143,7 +152,10 @@ public class Robot extends IterativeRobot {
 	 */
 	public void autonomousInit() {
 		if (Box.getRawButton(1)) {
-			step.add(new driveForward(3.0, 1.0));
+			step.add(new driveForward(2.0));
+			stepSecondary.add(new Action());
+			step.add(null);
+			stepSecondary.add(null);
 			// (time to drive forward, drive)
 		}
 		if (Box.getRawButton(2)) {
@@ -203,55 +215,66 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during operator control
 	 */
 	public void teleopPeriodic() {
+		SmartDashboard.putNumber("ljoystick", JoyPad.getRawAxis(5));
+long currenttime;
+long ttime = 150000;
+long timeleft;
 
+currenttime=System.currentTimeMillis()-starttime;
+timeleft=ttime-currenttime;
+SmartDashboard.putNumber("time left", timeleft/1000);
 		// double throttle = (-JoyL.getThrottle() + 1.0) / 2.0;
+		
+
+
 		d.tank(JoyL, JoyR);
 		
 		hammer.hammerspin(JoyPad);
+		
+		screw.screwSpin(JoyPad);
 
 		if (JoyPad.getRawButton(Const.jPadButtonA)) {
 			intake.outtakeBall();
 		}
-		else
-			intake.stopIntake();
-		
-		if (JoyPad.getRawButton(Const.jPadButtonB)) {
+		else if (JoyPad.getRawButton(Const.jPadButtonB)) {
 			intake.intakeBall();
 		}
 		else
 			intake.stopIntake();
 		
 		if (JoyPad.getRawButton(Const.jPadButtonX)) {
-			screw.extend();
-		}
-		else
-			screw.stopScrew();
-		
-		if (JoyPad.getRawButton(Const.jPadButtonY)) {
-			screw.pullin();
-		}
-		else
-			screw.stopScrew();
-		
-		if (JoyPad.getRawButton(Const.jPadButtonLeft)) {
-			scissors.reload();
-		}
-		else if(JoyPad.getRawAxis(2) == 1.0) {
 			scissors.shoot();
 		}
 		
-		if (JoyPad.getRawButton(Const.jPadButtonRight)) {
-			screwPnue.reload();
+		if (JoyPad.getRawButton(Const.jPadButtonY)) {
+			scissors.reload();
 		}
-		else if(JoyPad.getRawAxis(3) == 1.0) {
+		
+		if(JoyPad.getRawAxis(2) == 1.0) {
 			screwPnue.shoot();
 		}
 		
+		if(JoyPad.getRawAxis(3) == 1.0) {
+			screwPnue.reload();
+		}
+		
+		if(JoyPad.getRawButton(Const.jPadButtonLeft)){
+			
+			
+			
+		}
+		
 		if (JoyPad.getRawButton(Const.jPadButtonStart)) {
-			winch.ReelBack();
+			winch.Reel();
 		}
 		else
 			winch.ReelStop();
+		
+		if (JoyPad.getRawButton(Const.jPadButtonBack)){
+			
+			intakePnue.out();
+			
+		}
 		
 
 		// SmartDashboard.putNumber("IMU Yaw", imu.getYaw());

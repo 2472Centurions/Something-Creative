@@ -49,6 +49,9 @@ public class driveForward extends Action {
 			if(Robot.imu.getYaw()<Const.yawDeadZone)
 				Robot.d.tankdrive1(.8*speed,1*speed);
 			
+			if(Robot.imu.getYaw()>-Const.yawDeadZone&&Robot.imu.getYaw()<Const.yawDeadZone)
+				Robot.d.tankdrive1(1*speed, 1*speed);
+			
 		}
 	}
 

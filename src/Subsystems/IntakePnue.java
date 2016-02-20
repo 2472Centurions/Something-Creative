@@ -14,13 +14,13 @@ public class IntakePnue {
 	
 	public void goIn() {
 		
-		iP.set(true);
+		iP.set(false);
 		
 	}
 
 	public void out() {
 		
-		iP.set(false);
+		iP.set(true);
 		
 	}
 }

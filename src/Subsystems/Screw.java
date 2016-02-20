@@ -1,6 +1,7 @@
 package Subsystems;
 
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.Joystick;
 
 public class Screw {
 	
@@ -10,28 +11,16 @@ public class Screw {
 		
 		screw = new CANTalon(sM);
 		
-		screw.ConfigFwdLimitSwitchNormallyOpen(true);
-		
+		screw.ConfigFwdLimitSwitchNormallyOpen(false);
+		screw.ConfigRevLimitSwitchNormallyOpen(false);
 		screw.enableLimitSwitch(true, true);
 		screw.enableBrakeMode(true);
 		
 	}
 	
-	public void extend(){
+	public void screwSpin(Joystick j){
 		
-		screw.set(1);
-	
-	}
-	
-	public void pullin(){
-		
-		screw.set(-1);
-	
-	}
-	
-	public void stopScrew(){
-		
-		screw.set(0);
+		screw.set(j.getRawAxis(5));
 		
 	}
 }

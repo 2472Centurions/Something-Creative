@@ -15,13 +15,13 @@ public class Scissors {
 	
 	public void shoot(){
 		
-		scissors.set(Value.kForward);
+		scissors.set(Value.kReverse);
 		
 	}
 	
 	public void reload(){
 		
-		scissors.set(Value.kReverse);
+		scissors.set(Value.kForward);
 		
 	}
 	

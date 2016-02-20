@@ -12,7 +12,7 @@ public class Hammer {
 		hammer = new CANTalon(hM);
 		
 		hammer.ConfigFwdLimitSwitchNormallyOpen(true);
-		
+		hammer.ConfigRevLimitSwitchNormallyOpen(true);
 		hammer.enableLimitSwitch(true, true);
 		hammer.enableBrakeMode(true);
 		
@@ -20,7 +20,7 @@ public class Hammer {
 	
 	public void hammerspin(Joystick j){
 	
-		hammer.set(j.getRawAxis(1));
+		hammer.set(j.getRawAxis(1)*.5);
 	
 	}
 

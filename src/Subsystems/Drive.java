@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drive {
 	CANTalon[] moter = new CANTalon[4];
-	CANTalon FL, FR, BL, BR;
 
 	double x;
 	double y;
@@ -110,13 +109,16 @@ public class Drive {
 
 		if (k.getY() > range || k.getY() < -range) {
 
-			moter[3].set(k.getY());
-			moter[1].set(k.getY());
+			moter[2].set(-k.getY());
+			moter[0].set(-k.getY());
+
+			
 			
 		}
 		if (j.getY() > range || j.getY() < -range) {
-			moter[2].set(-j.getY());
-			moter[0].set(-j.getY());
+			moter[3].set(j.getY());
+			
+			moter[1].set(j.getY());
 		}
 	}
 	public void cantaloninit(int ramprate){
@@ -128,10 +130,10 @@ public class Drive {
 	
 	public void tankdrive1(double a, double b){
 		
-		FL.set(constrain(a));
-		BL.set(constrain(a));
-		FR.set(constrain(b));
-		BR.set(constrain(b));
+		moter[0].set(constrain(a));
+		moter[2].set(constrain(a));
+		moter[1].set(constrain(b));
+		moter[3].set(constrain(b));
 	}
 	
 	private double constrain(double In){
@@ -146,16 +148,16 @@ public class Drive {
 	
 	public void turn(String dir,double power){
 		if(dir=="right"){
-			FL.set(power);
-			BL.set(power);
-			FR.set(-power);
-			BR.set(-power);
+			moter[0].set(power);
+			moter[2].set(power);
+			moter[1].set(-power);
+			moter[3].set(-power);
 		}
 		if(dir=="left"){
-			FL.set(-power);
-			BL.set(-power);
-			FR.set(power);
-			BR.set(power);
+			moter[0].set(-power);
+			moter[2].set(-power);
+			moter[1].set(power);
+			moter[3].set(power);
 		}
 	}
 }
