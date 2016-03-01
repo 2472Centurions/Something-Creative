@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drive {
-	CANTalon[] moter = new CANTalon[4];
+	Talon[] moter = new Talon[4];
 
 	double x;
 	double y;
@@ -18,10 +18,10 @@ public class Drive {
 	double range, powerCurve;
 
 	public Drive(int FL, int FR, int BL, int BR) {
-		moter[0] = new CANTalon(FL);
-		moter[1] = new CANTalon(FR);
-		moter[2] = new CANTalon(BL);
-		moter[3] = new CANTalon(BR);
+		moter[0] = new Talon(FL);
+		moter[1] = new Talon(FR);
+		moter[2] = new Talon(BL);
+		moter[3] = new Talon(BR);
 		d = new RobotDrive(moter[0], moter[1], moter[2], moter[3]);
 	}
 
@@ -121,19 +121,21 @@ public class Drive {
 			moter[1].set(j.getY());
 		}
 	}
-	public void cantaloninit(int ramprate){
-		moter[0].setVoltageRampRate(ramprate);
-		moter[1].setVoltageRampRate(ramprate);
-		moter[2].setVoltageRampRate(ramprate);
-		moter[3].setVoltageRampRate(ramprate);
-	}
+	//public void cantaloninit(int ramprate){
+	//	moter[0].setVoltageRampRate(ramprate);
+	//	moter[1].setVoltageRampRate(ramprate);
+	//	moter[2].setVoltageRampRate(ramprate);
+	//	moter[3].setVoltageRampRate(ramprate);
+	//}
 	
 	public void tankdrive1(double a, double b){
 		
 		moter[0].set(constrain(a));
 		moter[2].set(constrain(a));
-		moter[1].set(constrain(b));
-		moter[3].set(constrain(b));
+		moter[1].set(-constrain(b));
+		moter[3].set(-constrain(b));
+		SmartDashboard.putNumber("Left", a);
+		SmartDashboard.putNumber("Right", b);
 	}
 	
 	private double constrain(double In){
@@ -150,14 +152,14 @@ public class Drive {
 		if(dir=="right"){
 			moter[0].set(power);
 			moter[2].set(power);
-			moter[1].set(-power);
-			moter[3].set(-power);
+			moter[1].set(power);
+			moter[3].set(power);
 		}
 		if(dir=="left"){
 			moter[0].set(-power);
 			moter[2].set(-power);
-			moter[1].set(power);
-			moter[3].set(power);
+			moter[1].set(-power);
+			moter[3].set(-power);
 		}
 	}
 }

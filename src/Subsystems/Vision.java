@@ -8,13 +8,14 @@ public class Vision {
 		
 	}
 	
-	public static void camera(CameraServer server){
+	public static void camera(CameraServer server, String camNum){
 		
 		server = CameraServer.getInstance();
 		
 		server.setQuality(50);
 		
-		server.startAutomaticCapture("cam3");
-		
+		server.startAutomaticCapture(camNum);
+	
+	
 	}
 }

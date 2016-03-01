@@ -41,13 +41,14 @@ public class driveForward extends Action {
 	}
 
 	public void periodic() {
+		SmartDashboard.putNumber("Speed", speed);
 		if (!isTimedOut()) {
 			
 			if(Robot.imu.getYaw()>Const.yawDeadZone)
-				Robot.d.tankdrive1(1*speed,.8*speed);
-			
-			if(Robot.imu.getYaw()<Const.yawDeadZone)
 				Robot.d.tankdrive1(.8*speed,1*speed);
+			
+			if(Robot.imu.getYaw()<-Const.yawDeadZone)
+				Robot.d.tankdrive1(1*speed,.8*speed);
 			
 			if(Robot.imu.getYaw()>-Const.yawDeadZone&&Robot.imu.getYaw()<Const.yawDeadZone)
 				Robot.d.tankdrive1(1*speed, 1*speed);

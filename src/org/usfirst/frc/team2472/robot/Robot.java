@@ -7,6 +7,9 @@ import com.kauailabs.nav6.frc.IMUAdvanced;
 import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.Image;
 import Actions.driveForward;
+import Actions.driveStraightUntilOverDefenses;
+import Actions.shootIntake;
+import Actions.turnRight;
 import Constants.Const;
 import Objects.Action;
 import Subsystems.Drive;
@@ -24,6 +27,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
@@ -42,11 +46,17 @@ public class Robot extends IterativeRobot {
 	//final String customAuto = "My Auto";
 	//String autoSelected;
 	//SendableChooser chooser;
-	CameraServer usb;
+	//int bits;
+	//SensorBase dist;
+	
+	//exampleAnalog.getOversampleBits();
+	//bits = exampleAnalog.getOversampleBits();
+	//exampleAnalog.setAverageBits(2);
+	//bits = exampleAnalog.getAverageBits();
+	CameraServer usb,usb2;
 	Compressor compressor = new Compressor(Const.compressorS);
 	long starttime= System.currentTimeMillis();
 	public static IntakePnue intakePnue = new IntakePnue(Const.intakePnueS);
-
 	int session, session2;
 	Image frame, frame2;
 	AxisCamera camera, camera2;
@@ -89,10 +99,11 @@ public class Robot extends IterativeRobot {
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
-
-		Vision.camera(usb);
+		Vision.camera(usb2,"cam4");
+		Vision.camera(usb,"cam0");
+		
 		compressor.setClosedLoopControl(true);
-		d.cantaloninit(24);
+		//d.cantaloninit(24);
 		frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		scissors.reload();
 		suspension.shoot();
@@ -152,14 +163,26 @@ public class Robot extends IterativeRobot {
 	 */
 	public void autonomousInit() {
 		if (Box.getRawButton(1)) {
-			step.add(new driveForward(2.0));
+			step.clear();
+			step.add(new driveForward(5.0));
 			stepSecondary.add(new Action());
 			step.add(null);
 			stepSecondary.add(null);
 			// (time to drive forward, drive)
 		}
 		if (Box.getRawButton(2)) {
-
+			step.clear();
+			step.add(new driveStraightUntilOverDefenses(30.0));
+			stepSecondary.add(new shootIntake(2.0));
+			step.add(null);
+			stepSecondary.add(null);
+		}
+		if (Box.getRawButton(3)) {
+			step.clear();
+			step.add(new turnRight(5.0,45));
+			stepSecondary.add(new shootIntake(2.0));
+			step.add(null);
+			stepSecondary.add(null);
 		}
 
 		//autoSelected = (String) chooser.getSelected();
@@ -184,6 +207,10 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during autonomous
 	 */
 	public void autonomousPeriodic() {
+		
+		
+		SmartDashboard.putNumber("Pitch", imu.getPitch());
+		SmartDashboard.putNumber("YAW", imu.getYaw());
 
 		if (step.size() > 0 && step.get(currentAction) != null) {
 
@@ -215,19 +242,59 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during operator control
 	 */
 	public void teleopPeriodic() {
-		SmartDashboard.putNumber("ljoystick", JoyPad.getRawAxis(5));
-long currenttime;
-long ttime = 150000;
-long timeleft;
+		if(Box.getRawButton(4)){
+			Vision.camera(usb,"cam0");
+			
+		}else Vision.camera(usb2,"cam4");
+		
+		if(JoyL.getRawButton(1)){
+			if (Robot.imu != null && !Const.zeroS) {
 
-currenttime=System.currentTimeMillis()-starttime;
-timeleft=ttime-currenttime;
-SmartDashboard.putNumber("time left", timeleft/1000);
+				Robot.imu.zeroYaw();
+				
+				Const.zeroS = true;
+
+			}
+			if(JoyL.getY()<0){
+			if(Robot.imu.getYaw()>Const.yawDeadZone)
+				Robot.d.tankdrive1(.8*-JoyL.getY(),1*-JoyL.getY());
+			
+			if(Robot.imu.getYaw()<-Const.yawDeadZone)
+				Robot.d.tankdrive1(1*-JoyL.getY(),.8*-JoyL.getY());
+			
+			if(Robot.imu.getYaw()>-Const.yawDeadZone&&Robot.imu.getYaw()<Const.yawDeadZone)
+				Robot.d.tankdrive1(1 * -JoyL.getY(), 1 * -JoyL.getY());
+			}else{
+				if(Robot.imu.getYaw()>Const.yawDeadZone)
+					Robot.d.tankdrive1(1*-JoyL.getY(),.8*-JoyL.getY());
+				
+				if(Robot.imu.getYaw()<-Const.yawDeadZone)
+					Robot.d.tankdrive1(.8*-JoyL.getY(),1*-JoyL.getY());
+				
+				if(Robot.imu.getYaw()>-Const.yawDeadZone&&Robot.imu.getYaw()<Const.yawDeadZone)
+					Robot.d.tankdrive1(1 * -JoyL.getY(), 1 * -JoyL.getY());
+			}
+		}
+		else{
+			d.tank(JoyR, JoyL);
+			
+			Const.zeroS = false;
+		}
+		
+		
+		SmartDashboard.putNumber("ljoystick", JoyPad.getRawAxis(5));
+		long currenttime;
+		long ttime = 150000;
+		long timeleft;
+
+		currenttime=System.currentTimeMillis()-starttime;
+		timeleft=ttime-currenttime;
+		SmartDashboard.putNumber("time left", timeleft/1000);
 		// double throttle = (-JoyL.getThrottle() + 1.0) / 2.0;
 		
 
+		
 
-		d.tank(JoyL, JoyR);
 		
 		hammer.hammerspin(JoyPad);
 		
@@ -258,9 +325,15 @@ SmartDashboard.putNumber("time left", timeleft/1000);
 			screwPnue.reload();
 		}
 		
-		if(JoyPad.getRawButton(Const.jPadButtonLeft)){
+		if(JoyR.getRawButton(Const.stickTrig)){
 			
+			suspension.shoot();
 			
+		}
+		
+		if(JoyL.getRawButton(Const.stickTrig)){
+			
+			suspension.reload();
 			
 		}
 		
@@ -286,10 +359,10 @@ SmartDashboard.putNumber("time left", timeleft/1000);
 	public void testPeriodic() {
 		
 		if (Box.getRawButton(1)) {
-			d.runMotor(Const.FL);
+			d.runMotor(Const.FR);
 		}
 		if (Box.getRawButton(2)) {
-			d.runMotor(Const.FR);
+			d.runMotor(Const.FL);
 		}
 		if (Box.getRawButton(3)) {
 			d.runMotor(Const.BL);

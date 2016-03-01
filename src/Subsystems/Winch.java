@@ -13,9 +13,9 @@ public class Winch {
 		
 		winchM = new CANTalon(wM);
 		
-		winchM.ConfigFwdLimitSwitchNormallyOpen(true);
+		//winchM.ConfigFwdLimitSwitchNormallyOpen(true);
 		
-		winchM.enableLimitSwitch(true, false);
+		//winchM.enableLimitSwitch(true, false);
 		winchM.enableBrakeMode(true);
 	}
 

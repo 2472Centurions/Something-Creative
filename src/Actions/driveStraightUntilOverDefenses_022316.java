@@ -3,10 +3,8 @@ package Actions;
 import Objects.Action;
 import org.usfirst.frc.team2472.robot.Robot;
 
-import Constants.Const;
 
-
-public class driveStraightUntilOverDefenses extends Action {
+public class driveStraightUntilOverDefenses_022316 extends Action {
 
 		public double pitch;
 		
@@ -20,13 +18,13 @@ public class driveStraightUntilOverDefenses extends Action {
 		
 		private boolean done = false;
 
-		public driveStraightUntilOverDefenses(double time) {
+		public driveStraightUntilOverDefenses_022316(double time) {
 
 			timeout = time;
 			
 		}
 
-		public driveStraightUntilOverDefenses(double time, double speeed) {
+		public driveStraightUntilOverDefenses_022316(double time, double speeed) {
 
 			timeout = time;
 
@@ -49,7 +47,7 @@ public class driveStraightUntilOverDefenses extends Action {
 
 		public void periodic() {
 			
-			//double adjustment = .1 * Robot.imu.getYaw();
+			double adjustment = .1 * Robot.imu.getYaw();
 			
 			if (Math.abs(pitch - Robot.imu.getPitch()) >= tolerance) {
 				
@@ -59,16 +57,7 @@ public class driveStraightUntilOverDefenses extends Action {
 			
 			if (!isTimedOut()) {
 
-				//Robot.d.tankdrive1(.8*speed + adjustment, .8*speed - adjustment);
-				
-				if(Robot.imu.getYaw()>Const.yawDeadZone)
-					Robot.d.tankdrive1(.8*speed,1*speed);
-				
-				if(Robot.imu.getYaw()<-Const.yawDeadZone)
-					Robot.d.tankdrive1(1*speed,.8*speed);
-				
-				if(Robot.imu.getYaw()>-Const.yawDeadZone&&Robot.imu.getYaw()<Const.yawDeadZone)
-					Robot.d.tankdrive1(1*speed, 1*speed);
+				Robot.d.tankdrive1(.8*speed + adjustment, .8*speed - adjustment);
 				
 			}
 				
@@ -76,16 +65,9 @@ public class driveStraightUntilOverDefenses extends Action {
 
 			if (anglechange == true) {
 				
-				//Robot.d.tankdrive1(.8*speed + adjustment, .8*speed - adjustment);
+				Robot.d.tankdrive1(.8*speed + adjustment, .8*speed - adjustment);
 				
-				if(Robot.imu.getYaw()>Const.yawDeadZone)
-					Robot.d.tankdrive1(.8*speed,1*speed);
 				
-				if(Robot.imu.getYaw()<-Const.yawDeadZone)
-					Robot.d.tankdrive1(1*speed,.8*speed);
-				
-				if(Robot.imu.getYaw()>-Const.yawDeadZone&&Robot.imu.getYaw()<Const.yawDeadZone)
-					Robot.d.tankdrive1(1*speed, 1*speed);
 				
 				if (Math.abs(pitch - Robot.imu.getPitch()) >= tolerance ){
 					

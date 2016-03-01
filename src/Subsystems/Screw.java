@@ -11,8 +11,8 @@ public class Screw {
 		
 		screw = new CANTalon(sM);
 		
-		screw.ConfigFwdLimitSwitchNormallyOpen(false);
-		screw.ConfigRevLimitSwitchNormallyOpen(false);
+		screw.ConfigFwdLimitSwitchNormallyOpen(true);
+		screw.ConfigRevLimitSwitchNormallyOpen(true);
 		screw.enableLimitSwitch(true, true);
 		screw.enableBrakeMode(true);
 		
@@ -21,6 +21,24 @@ public class Screw {
 	public void screwSpin(Joystick j){
 		
 		screw.set(j.getRawAxis(5));
+		
+	}
+	
+	public void spin(){
+		
+		screw.set(1.0);
+		
+	}
+	
+	public void spinBack(){
+		
+		screw.set(-1.0);
+		
+	}
+	
+	public void stop(){
+		
+		screw.set(0.0);
 		
 	}
 }

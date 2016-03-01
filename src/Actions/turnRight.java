@@ -38,16 +38,16 @@ public class turnRight extends Action {
 
 	public void periodic() {
 		if (Robot.imu.getYaw() < angie - Const.angleError)
-			Robot.d.turn("right", 1);
+			Robot.d.turn("right", .25);
 		
 		if (Robot.imu.getYaw() > angie + Const.angleError)
-			Robot.d.turn("left", 1);
+			Robot.d.turn("left", .25);
 		
-		if (Robot.imu.getYaw() < angie + Const.angleError && Robot.imu.getYaw() > angie - Const.angleError) {
+		//if (Robot.imu.getYaw() < angie + Const.angleError && Robot.imu.getYaw() > angie - Const.angleError) {
 			
-			done = true;
+			//done = true;
 			
-		}
+		//}
 
 	}
 
@@ -59,7 +59,7 @@ public class turnRight extends Action {
 	
 	public boolean isFinished(){
 		
-		if(isTimedOut() || done){
+		if(isTimedOut()){
 			
 			endAction();
 			
