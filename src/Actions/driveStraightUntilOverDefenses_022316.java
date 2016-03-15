@@ -3,6 +3,8 @@ package Actions;
 import Objects.Action;
 import org.usfirst.frc.team2472.robot.Robot;
 
+import Constants.Const;
+
 
 public class driveStraightUntilOverDefenses_022316 extends Action {
 
@@ -10,7 +12,7 @@ public class driveStraightUntilOverDefenses_022316 extends Action {
 		
 		private boolean anglechange = false;
 
-		private double speed = .75;
+		private double speed = 1.0;
 		
 		private double tolerance = 5.0;
 		
@@ -47,7 +49,7 @@ public class driveStraightUntilOverDefenses_022316 extends Action {
 
 		public void periodic() {
 			
-			double adjustment = .1 * Robot.imu.getYaw();
+			//double adjustment = .1 * Robot.imu.getYaw();
 			
 			if (Math.abs(pitch - Robot.imu.getPitch()) >= tolerance) {
 				
@@ -57,7 +59,16 @@ public class driveStraightUntilOverDefenses_022316 extends Action {
 			
 			if (!isTimedOut()) {
 
-				Robot.d.tankdrive1(.8*speed + adjustment, .8*speed - adjustment);
+				//Robot.d.tankdrive1(.8*speed + adjustment, .8*speed - adjustment);
+				
+				if(Robot.imu.getYaw()>Const.yawDeadZone)
+					Robot.d.tankdrive1(.8*speed,1*speed);
+				
+				if(Robot.imu.getYaw()<-Const.yawDeadZone)
+					Robot.d.tankdrive1(1*speed,.8*speed);
+				
+				if(Robot.imu.getYaw()>-Const.yawDeadZone&&Robot.imu.getYaw()<Const.yawDeadZone)
+					Robot.d.tankdrive1(1*speed, 1*speed);
 				
 			}
 				
@@ -65,9 +76,16 @@ public class driveStraightUntilOverDefenses_022316 extends Action {
 
 			if (anglechange == true) {
 				
-				Robot.d.tankdrive1(.8*speed + adjustment, .8*speed - adjustment);
+				//Robot.d.tankdrive1(.8*speed + adjustment, .8*speed - adjustment);
 				
+				if(Robot.imu.getYaw()>Const.yawDeadZone)
+					Robot.d.tankdrive1(-.8*speed,-1*speed);
 				
+				if(Robot.imu.getYaw()<-Const.yawDeadZone)
+					Robot.d.tankdrive1(-1*speed,-.8*speed);
+				
+				if(Robot.imu.getYaw()>-Const.yawDeadZone&&Robot.imu.getYaw()<Const.yawDeadZone)
+					Robot.d.tankdrive1(-1*speed, -1*speed);
 				
 				if (Math.abs(pitch - Robot.imu.getPitch()) >= tolerance ){
 					

@@ -12,7 +12,7 @@ public class driveStraightUntilOverDefenses extends Action {
 		
 		private boolean anglechange = false;
 
-		private double speed = .75;
+		private double speed = 1.0;
 		
 		private double tolerance = 5.0;
 		

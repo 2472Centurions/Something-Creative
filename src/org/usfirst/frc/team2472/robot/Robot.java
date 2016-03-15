@@ -8,8 +8,12 @@ import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.Image;
 import Actions.driveForward;
 import Actions.driveStraightUntilOverDefenses;
+import Actions.driveStraightUntilOverDefenses_022316;
+import Actions.intakeBall;
+import Actions.shootBall;
 import Actions.shootIntake;
 import Actions.turnRight;
+import Actions.turnToZero;
 import Constants.Const;
 import Objects.Action;
 import Subsystems.Drive;
@@ -48,18 +52,16 @@ public class Robot extends IterativeRobot {
 	//SendableChooser chooser;
 	//int bits;
 	//SensorBase dist;
-	
+	boolean toggleSuspensionOn = true;
+	int currSession, sessionFront, sessionBack;
 	//exampleAnalog.getOversampleBits();
 	//bits = exampleAnalog.getOversampleBits();
 	//exampleAnalog.setAverageBits(2);
 	//bits = exampleAnalog.getAverageBits();
-	CameraServer usb,usb2;
 	Compressor compressor = new Compressor(Const.compressorS);
 	long starttime= System.currentTimeMillis();
 	public static IntakePnue intakePnue = new IntakePnue(Const.intakePnueS);
-	int session, session2;
-	Image frame, frame2;
-	AxisCamera camera, camera2;
+	Image frame;
 
 	Joystick JoyL = new Joystick(Const.lStick);
 	Joystick JoyR = new Joystick(Const.rStick);
@@ -99,25 +101,25 @@ public class Robot extends IterativeRobot {
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
-		Vision.camera(usb2,"cam4");
-		Vision.camera(usb,"cam0");
 		
 		compressor.setClosedLoopControl(true);
-		//d.cantaloninit(24);
+		d.cantaloninit(24);
 		frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+		sessionFront = NIVision.IMAQdxOpenCamera("cam2", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+		sessionBack = NIVision.IMAQdxOpenCamera("cam3", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+		currSession = sessionFront;
+		NIVision.IMAQdxConfigureGrab(currSession);
 		scissors.reload();
 		suspension.shoot();
 		// open the camera at the IP address assigned. This is the IP address
 		// that the camera
 		// can be accessed through the web interface.
-		camera = new AxisCamera("10.1.91.100");
-
-		frame2 = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
+		//camera = new AxisCamera("10.1.91.100");
 
 		// open the camera at the IP address assigned. This is the IP address
 		// that the camera
 		// can be accessed through the web interface.
-		camera2 = new AxisCamera("10.1.91.100");
+		//camera2 = new AxisCamera("10.1.91.100");
 
 		Timer.delay(2);
 		try {
@@ -164,25 +166,52 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		if (Box.getRawButton(1)) {
 			step.clear();
-			step.add(new driveForward(5.0));
+			stepSecondary.clear();
+			step.add(new shootIntake(2.0));
+			stepSecondary.add(new Action());
+			step.add(new intakeBall(2.0));
+			stepSecondary.add(new driveStraightUntilOverDefenses(4.0));
+			step.add(new turnToZero(2.0));
+			step.add(new shootBall(1.0));
 			stepSecondary.add(new Action());
 			step.add(null);
 			stepSecondary.add(null);
 			// (time to drive forward, drive)
 		}
 		if (Box.getRawButton(2)) {
+			
 			step.clear();
-			step.add(new driveStraightUntilOverDefenses(30.0));
-			stepSecondary.add(new shootIntake(2.0));
+			stepSecondary.clear();
+			step.add(new driveStraightUntilOverDefenses(4.0));
+			stepSecondary.add(new Action());
+			step.add(new turnToZero(2.0));
+			stepSecondary.add(new Action());
 			step.add(null);
 			stepSecondary.add(null);
+			
 		}
 		if (Box.getRawButton(3)) {
 			step.clear();
-			step.add(new turnRight(5.0,45));
-			stepSecondary.add(new shootIntake(2.0));
+			stepSecondary.clear();
+			step.add(new driveStraightUntilOverDefenses(4.0));
+			stepSecondary.add(new Action());
+			step.add(new turnToZero(2.0));
+			stepSecondary.add(new Action());
+			step.add(new driveStraightUntilOverDefenses_022316(4.0));
+			stepSecondary.add(new Action());
 			step.add(null);
 			stepSecondary.add(null);
+		}
+		if(Box.getRawButton(4)){
+			
+
+			step.clear();
+			stepSecondary.clear();
+			step.add(new turnRight(5.0,45));
+			stepSecondary.add(new Action());
+			step.add(null);
+			stepSecondary.add(null);
+			
 		}
 
 		//autoSelected = (String) chooser.getSelected();
@@ -242,12 +271,10 @@ public class Robot extends IterativeRobot {
 	 * This function is called periodically during operator control
 	 */
 	public void teleopPeriodic() {
-		if(Box.getRawButton(4)){
-			Vision.camera(usb,"cam0");
-			
-		}else Vision.camera(usb2,"cam4");
+		NIVision.IMAQdxGrab(currSession, frame, 1);
+		CameraServer.getInstance().setImage(frame);
 		
-		if(JoyL.getRawButton(1)){
+		if(JoyR.getRawButton(3)){
 			if (Robot.imu != null && !Const.zeroS) {
 
 				Robot.imu.zeroYaw();
@@ -293,7 +320,24 @@ public class Robot extends IterativeRobot {
 		// double throttle = (-JoyL.getThrottle() + 1.0) / 2.0;
 		
 
-		
+		if(Box.getRawButton(5)){
+			if(currSession == sessionFront){
+				
+				NIVision.IMAQdxStopAcquisition(currSession);
+				currSession = sessionBack;
+				NIVision.IMAQdxConfigureGrab(currSession);
+				
+			}
+			else if(currSession == sessionBack){
+				
+				NIVision.IMAQdxStopAcquisition(currSession);
+				currSession = sessionFront;
+				NIVision.IMAQdxConfigureGrab(currSession);
+				
+			}
+			
+			
+		}
 
 		
 		hammer.hammerspin(JoyPad);
@@ -325,23 +369,20 @@ public class Robot extends IterativeRobot {
 			screwPnue.reload();
 		}
 		
-		if(JoyR.getRawButton(Const.stickTrig)){
+		if(JoyR.getRawButton(1)){
 			
-			suspension.shoot();
+				suspension.shoot();
 			
 		}
-		
-		if(JoyL.getRawButton(Const.stickTrig)){
+		if(JoyL.getRawButton(1)){
 			
 			suspension.reload();
-			
+		
 		}
 		
 		if (JoyPad.getRawButton(Const.jPadButtonStart)) {
-			winch.Reel();
+			intakePnue.goIn();
 		}
-		else
-			winch.ReelStop();
 		
 		if (JoyPad.getRawButton(Const.jPadButtonBack)){
 			

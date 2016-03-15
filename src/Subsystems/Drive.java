@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drive {
-	Talon[] moter = new Talon[4];
+	CANTalon[] moter = new CANTalon[4];
 
 	double x;
 	double y;
@@ -18,10 +18,10 @@ public class Drive {
 	double range, powerCurve;
 
 	public Drive(int FL, int FR, int BL, int BR) {
-		moter[0] = new Talon(FL);
-		moter[1] = new Talon(FR);
-		moter[2] = new Talon(BL);
-		moter[3] = new Talon(BR);
+		moter[0] = new CANTalon(FL);
+		moter[1] = new CANTalon(FR);
+		moter[2] = new CANTalon(BL);
+		moter[3] = new CANTalon(BR);
 		d = new RobotDrive(moter[0], moter[1], moter[2], moter[3]);
 	}
 
@@ -121,12 +121,12 @@ public class Drive {
 			moter[1].set(j.getY());
 		}
 	}
-	//public void cantaloninit(int ramprate){
-	//	moter[0].setVoltageRampRate(ramprate);
-	//	moter[1].setVoltageRampRate(ramprate);
-	//	moter[2].setVoltageRampRate(ramprate);
-	//	moter[3].setVoltageRampRate(ramprate);
-	//}
+	public void cantaloninit(int ramprate){
+		moter[0].setVoltageRampRate(ramprate);
+		moter[1].setVoltageRampRate(ramprate);
+		moter[2].setVoltageRampRate(ramprate);
+		moter[3].setVoltageRampRate(ramprate);
+	}
 	
 	public void tankdrive1(double a, double b){
 		

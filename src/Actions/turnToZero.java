@@ -4,35 +4,21 @@ import org.usfirst.frc.team2472.robot.Robot;
 import Constants.Const;
 import Objects.Action;
 
-public class turnRight extends Action {
+public class turnToZero extends Action {
 	
 	private double angie = 0;
 
 	private boolean done = false;
 
-	public turnRight(double time) {
+	public turnToZero(double time) {
 
 		timeout = time;
 		
-	}
-
-	public turnRight(double time, double angle) {
-
-		angie = angle;
-		
-		timeout = time;
-
 	}
 
 	public void startAction() {
 
 		super.startAction();
-
-		if (Robot.imu != null) {
-
-			Robot.imu.zeroYaw();
-
-		}
 
 	}
 

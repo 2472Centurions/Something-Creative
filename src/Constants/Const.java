@@ -2,13 +2,13 @@ package Constants;
 
 public class Const {
 	
-	public static final int FL = 3;
+	public static final int FL = 6;
 	public static final int FR = 2;
-	public static final int BL = 1;
-	public static final int BR = 0;
+	public static final int BL = 3;
+	public static final int BR = 1;
 	
 	public static final int winchM = 5;
-	public static final int intakeM = 6;
+	public static final int intakeM = 4;
 	public static final int screwM = 10;
 	public static final int hammerM = 8;
 	
